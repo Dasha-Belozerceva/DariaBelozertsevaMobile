@@ -12,7 +12,7 @@ public class PageObject implements IPageObject {
 
     public PageObject(String appType, AppiumDriver appiumDriver) throws Exception {
 
-        System.out.println("Current app type: "+appType);
+        System.out.println("Current app type: " + appType);
         switch(appType){
             case "web":
                 somePageObject = new WebPageObject(appiumDriver);
@@ -25,13 +25,27 @@ public class PageObject implements IPageObject {
 
     }
 
-
     @Override
-    public WebElement getWelement(String weName) throws NoSuchFieldException, IllegalAccessException {
+    public WebElement getWebElement(String weName) throws NoSuchFieldException, IllegalAccessException {
         // use reflection technique
         Field field = somePageObject.getClass().getDeclaredField(weName);
         field.setAccessible(true);
         return (WebElement) field.get(somePageObject);
+    }
 
+    public void sendKeyToField(String weName, String key) throws NoSuchFieldException, IllegalAccessException {
+        getWebElement(weName).sendKeys(key);
+    }
+
+    public void clickButton(String weName) throws NoSuchFieldException, IllegalAccessException {
+        getWebElement(weName).click();
+    }
+
+    public Boolean checkIfSearchResultIsDisplayed(String weName) throws NoSuchFieldException, IllegalAccessException {
+        return getWebElement(weName).isDisplayed();
+    }
+
+    public String getTextOfWebElement(String weName) throws NoSuchFieldException, IllegalAccessException {
+        return getWebElement(weName).getText();
     }
 }
