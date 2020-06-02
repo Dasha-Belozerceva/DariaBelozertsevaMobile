@@ -24,11 +24,19 @@ public class BaseTest implements IDriver {
         return pageObject;
     }
 
-    @Parameters({"platformName", "appType", "deviceName", "app", "browserName"})
+    @Parameters({"platformName", "appType", "deviceName", "udid", "app", "appPackage", "appActivity", "bundleId", "browserName"})
     @BeforeMethod(alwaysRun = true)
-    public void setUp(String platformName, String appType, String deviceName, @Optional("") String app, @Optional("") String browserName) throws Exception {
+    public void setUp(String platformName,
+                      @Optional("") String appType,
+                      @Optional("") String deviceName,
+                      @Optional("") String udid,
+                      @Optional("") String appPackage,
+                      @Optional("") String appActivity,
+                      @Optional("") String app,
+                      @Optional("") String bundleId,
+                      @Optional("") String browserName) throws Exception {
         System.out.println("Before: app type - " + appType);
-        setAppiumDriver(platformName, deviceName, browserName, app);
+        setAppiumDriver(platformName, deviceName, udid, browserName, app, appPackage, appActivity, bundleId);
         setPageObject(appType, appiumDriver);
     }
 
@@ -38,18 +46,25 @@ public class BaseTest implements IDriver {
         appiumDriver.closeApp();
     }
 
-    private void setAppiumDriver(String platformName, String deviceName, String browserName, String app) {
+    private void setAppiumDriver(String platformName, String deviceName, String udid, String browserName, String app, String appPackage, String appActivity, String bundleId) {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         //mandatory Android capabilities
         capabilities.setCapability("platformName", platformName);
         capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("udid", udid);
 
-        if (app.endsWith(".apk")) {
-            capabilities.setCapability("app", (new File(app)).getAbsolutePath());
-        } else {
-            capabilities.setCapability("browserName", browserName);
-            capabilities.setCapability("chromedriverDisableBuildCheck", "true");
-        }
+        if (app.endsWith(".apk")) capabilities.setCapability("app", (new File(app)).getAbsolutePath());
+
+        // Capabilities for test Android Native app on EPAM Mobile Cloud
+        capabilities.setCapability("appPackage", appPackage);
+        capabilities.setCapability("appActivity", appActivity);
+
+        // Capabilities for test iOS Native app on EPAM Mobile Cloud
+        capabilities.setCapability("bundleId", bundleId);
+
+        // Capabilities for test web app
+        capabilities.setCapability("browserName", browserName);
+        capabilities.setCapability("chromedriverDisableBuildCheck", "true");
 
         try {
             appiumDriver = new AppiumDriver(new URL(System.getProperty("ts.appium")), capabilities);

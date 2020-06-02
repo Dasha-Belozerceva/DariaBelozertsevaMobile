@@ -3,6 +3,10 @@ package scenarios;
 import org.openqa.selenium.*;
 import setup.BaseTest;
 
+import static org.testng.Assert.fail;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+
 import static utils.CutImageUtil.cutImage;
 import static utils.PropertyDataInitializer.getTestProperty;
 
@@ -13,9 +17,6 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 public class NativeMobileTests extends BaseTest {
     @Test(groups = {"native"}, description = "When user clicks sign in button without entering email and password popup error window is shown")
@@ -41,7 +42,7 @@ public class NativeMobileTests extends BaseTest {
             assertTrue(text.contains(getTestProperty("incorrectInputMessage")),
                     "actual text = " + text + ", but expected it includes = " + getTestProperty("incorrectInputMessage"));
         } catch (TesseractException e) {
-            e.printStackTrace();
+            fail(e.getStackTrace().toString());
         }
     }
 
