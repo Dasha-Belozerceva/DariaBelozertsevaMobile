@@ -3,57 +3,27 @@ package scenarios;
 import org.openqa.selenium.*;
 import setup.BaseTest;
 
-import static org.testng.Assert.fail;
-import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
-
-import static utils.CutImageUtil.cutImage;
 import static utils.PropertyDataInitializer.getTestProperty;
-
-import java.io.File;
-import java.io.IOException;
-
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
 
 import org.testng.annotations.Test;
 
 public class NativeMobileTests extends BaseTest {
-    @Test(groups = {"native"}, description = "When user clicks sign in button without entering email and password popup error window is shown")
-    public void checkIncorrectEmailAndPasswordMessage() throws IllegalAccessException, NoSuchFieldException, IOException, InterruptedException {
-        // Try to sign in without typing email and password
-        getPageObject().clickButton("signInBtn");
-        // Thread.sleep() is bad practice, but I couldn't find way to handle virtual function 'setError'
-        // to set Autocomplete textView on widget.
-        // For example, I've tried to make Explicit wait for email field and handle condition when all dynamic actions would finish,
-        // but as I say virtual function wasn't handled.
-        //So only way to catch textView which I've found is to put Thread.sleep().
-        Thread.sleep(5000);
-        // get emulator screenshot
-        File screenShot = getDriver().getScreenshotAs(OutputType.FILE);
-        // cut screenshot to exclude excess text
-        cutImage(screenShot);
-        // recognize text on image and check if text of error message is in the screen
-        try {
-            Tesseract tesseract = new Tesseract();
-            File file = new File(this.getClass().getClassLoader().getResource("tesseractUtils/").getPath());
-            tesseract.setDatapath(file.getAbsolutePath());
-            String text = tesseract.doOCR(screenShot);
-            assertTrue(text.contains(getTestProperty("incorrectInputMessage")),
-                    "actual text = " + text + ", but expected it includes = " + getTestProperty("incorrectInputMessage"));
-        } catch (TesseractException e) {
-            fail(e.getStackTrace().toString());
-        }
-    }
-
     @Test(groups = {"native"}, description = "Register new User and test how that user sign in")
     public void simpleNativeTest() throws IllegalAccessException, NoSuchFieldException {
         //go to register page and register new user
+//        getPageObject().clickButton("signInBtn");
+//        assertEquals(getPageObject().getTextOfWebElement("errorMessage"), getTestProperty("incorrectInputMessage"),
+//                "Expected message: " +
+//                        getTestProperty("incorrectInputMessage") +
+//                        "but actual is " + getPageObject().getTextOfWebElement("errorMessage"));
         getPageObject().clickButton("registerBtn");
         getPageObject().sendKeyToField("registrationEmailField", getTestProperty("email"));
         getPageObject().sendKeyToField("registrationUsernameField", getTestProperty("username"));
         getPageObject().sendKeyToField("registrationPasswordField", getTestProperty("password"));
         getPageObject().sendKeyToField("registrationConfirmPassField", getTestProperty("password"));
+//        // for iOS
+//        getPageObject().clickButton("agreement");
         getPageObject().clickButton("registerNewAccBtn");
         //sign in as new user
         getPageObject().sendKeyToField("signInEmailField", getTestProperty("email"));
