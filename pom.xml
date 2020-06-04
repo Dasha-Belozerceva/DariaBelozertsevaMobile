@@ -29,12 +29,6 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>net.sourceforge.tess4j</groupId>
-            <artifactId>tess4j</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-
     </dependencies>
 
     <build>
