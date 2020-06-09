@@ -9,7 +9,7 @@ public class WebPageObject {
     @FindBy(xpath = "//input[@name='q']")
     WebElement searchField;
 
-    @FindBy(css = "button[class='Tg7LZd']")
+    @FindBy(xpath = "//button[@class='Tg7LZd']")
     WebElement searchBtn;
 
     @FindBy(xpath = "//div[@id='rso']/div")
