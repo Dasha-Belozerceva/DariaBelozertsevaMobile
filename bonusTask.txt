@@ -1,0 +1,7 @@
+To avoid storing personal security token in github I suggest following solution:
+1. Create environment variable where you should to put value of token
+2.Put path to this variable into pom.xml:
+<systemPropertyVariables>
+                        <ts.appium>https://EPM-TSTF:${env.TOKEN_HOME}@mobilecloud.epam.com/wd/hub</ts.appium>
+ </systemPropertyVariables>
+3. Now only person who has own token could run all tests, by perform first step of this algorithm.
