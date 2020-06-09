@@ -25,7 +25,6 @@ public class WebMobileTests extends BaseTest {
         getPageObject().sendKeyToField("searchField", getTestProperty("keyword"));
         getPageObject().clickButton("searchBtn");
         //check if results of search are displayed on the page
-        waitUntilPageLoad();
         assertTrue(getPageObject().checkIfSearchResultIsDisplayed("searchResult"), "Result of searching 'EPAM' keyword doesn't exist on the page");
     }
 }
